@@ -1,0 +1,53 @@
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+  - name: tagName
+    displayName: "Containers image tag"
+    type: string
+    default: latest
+
+  - name: containerRegistry
+    displayName: "Container registry service connection"
+    type: string
+    default: anext.azurecr.io
+
+  - name: repositoryName
+    displayName: "Container repository name"
+    type: string
+    default: container-test-app
+
+stages:
+
+  - stage: Build
+    jobs:
+    - job: 
+      steps:
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: 'env | sort'
+
+        - task: Docker@2
+          displayName: "Build frontend"
+          inputs:
+            containerRegistry: '${{ parameters.containerRegistry }}'
+            repository: '${{ parameters.containerRegistry }}/frontend'
+            command: 'buildAndPush'
+            Dockerfile: 'frontend.Dockerfile'
+            buildContext: 'frontend'
+            tags: '${{ parameters.tagName }}'
+
+        - task: Docker@2
+          displayName: "Build backend"
+          inputs:
+            containerRegistry: '${{ parameters.containerRegistry }}'
+            repository: '${{ parameters.containerRegistry }}/backend'
+            command: 'buildAndPush'
+            Dockerfile: 'backend.Dockerfile'
+            buildContext: 'backend'
+            tags: '${{ parameters.tagName }}'
