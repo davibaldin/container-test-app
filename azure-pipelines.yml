@@ -131,4 +131,4 @@ stages:
             releaseName: '${{ parameters.repositoryName }}-back'
             valueFile: 'helm/values/backend.yaml'
             recreate: true
-            resetValues: true         
+            resetValues: true
