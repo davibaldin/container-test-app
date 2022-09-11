@@ -1,15 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "My API",
+    "description": "Description",
+    "version": "1.0.0"
   },
-  "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": [],
   "paths": {
     "/api/v1/system-environment": {
       "get": {

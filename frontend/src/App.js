@@ -23,6 +23,7 @@ function App() {
         </p>
         <h2>Backend API  :: /system-environment</h2>
         <JsonToTable json={systemEnvironment} />
+        <p><a href={process.env.REACT_APP_BACKEND_ADDRESS}>Explore backend API</a></p>
     </div>
   );
 }
