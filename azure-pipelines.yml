@@ -1,6 +1,6 @@
 
 trigger:
-- master
+- disabled
 
 pool:
   #vmImage: ubuntu-latest
@@ -85,6 +85,7 @@ stages:
         - task: KubernetesManifest@0
           inputs:
             action: 'createSecret'
+            kubernetesServiceConnection: '${{ parameters.kubernetesCluster }}'
             secretType: 'dockerRegistry'
             namespace: '${{ parameters.namespace }}'
             secretName: '${{ parameters.containerRegistry }}'
