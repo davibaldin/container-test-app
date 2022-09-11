@@ -111,7 +111,7 @@ stages:
             namespace: '${{ parameters.namespace }}'
             command: 'upgrade'
             chartType: 'FilePath'
-            chartPath: 'sample-app-1.0.tgz'
+            chartPath: '$(Build.ArtifactStagingDirectory)/sample-app-1.0.tgz'
             chartVersion: '1.0'
             releaseName: '${{ parameters.repositoryName }}'
             valueFile: 'helm/values/frontend.yaml'
