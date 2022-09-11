@@ -1,6 +1,6 @@
 
 trigger:
-- disabled
+- main
 
 pool:
   #vmImage: ubuntu-latest
