@@ -52,7 +52,7 @@ stages:
           displayName: "Build frontend"
           inputs:
             containerRegistry: '${{ parameters.containerRegistry }}'
-            repository: '${{ parameters.containerRegistry }}'
+            repository: '${{ parameters.repositoryName }}'
             command: 'buildAndPush'
             Dockerfile: 'frontend.Dockerfile'
             buildContext: 'frontend'
@@ -62,7 +62,7 @@ stages:
           displayName: "Build backend"
           inputs:
             containerRegistry: '${{ parameters.containerRegistry }}'
-            repository: '${{ parameters.containerRegistry }}'
+            repository: '${{ parameters.repositoryName }}'
             command: 'buildAndPush'
             Dockerfile: 'backend.Dockerfile'
             buildContext: 'backend'
