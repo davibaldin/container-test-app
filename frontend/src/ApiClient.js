@@ -1,7 +1,6 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL: "http://localhost:8080/api/v1",
+var clientConfig = {
   headers: {
     "Content-type": "application/json"
   },
@@ -9,4 +8,7 @@ export default axios.create({
   params: {
     access_token: "token-123-token",
   },
-});
+};
+clientConfig.baseURL = process.env.REACT_APP_BACKEND_ADDRESS;
+
+export default axios.create(clientConfig);

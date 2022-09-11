@@ -5,6 +5,12 @@ serviceAccount:
   create: true
   name: "frontend"
 
+config:
+  - name: frontend-env
+    mountPath: /app/.env
+    data: |-
+      REACT_APP_BACKEND_ADDRESS=https://test-back.test-app.anext.com.br/api/v1
+
 service:
   type: ClusterIP
   port: 3000
@@ -15,5 +21,9 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: "nginx"
   hosts:
-    - host: test-frontend.domain.com
+    - host: test-front.test-app.anext.com.br
       paths: ["/"]
+  tls:
+    - hosts:
+        - test-front.test-app.anext.com.br
+      secretName: star.test-app.anext.com.br

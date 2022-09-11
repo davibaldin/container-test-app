@@ -1,13 +1,21 @@
 {{- if .Values.config }}
+{{- range .Values.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "sample-app.name" .}}-config
-  namespace: {{.Release.Namespace}}
+  name: {{ .name }}
   labels:
-    "app.kubernetes.io/name": '{{ template "sample-app.name" .}}'
-    "app.kubernetes.io/managed-by": "{{ .Release.Service }}"
-    "app.kubernetes.io/instance": "{{ .Release.Name }}"
+    "app.kubernetes.io/name": '{{ $.Release.Name }}'
+    "app.kubernetes.io/managed-by": "{{ $.Release.Service }}"
+    "app.kubernetes.io/instance": "{{ $.Release.Name }}"
 data:
-{{ toYaml .Values.config | indent 2 }}
+  {{ if .data }}
+  {{ .name }}: |-
+    {{- .data | nindent 4 }}
+  {{ else if .loadFile }}
+  {{ .name }}: |-
+{{ $.Files.Get .loadFile | indent 4}}
+  {{ end }}
+  
+{{- end }}
 {{- end }}

@@ -3,8 +3,6 @@ import './App.css';
 import { JsonToTable } from "react-json-to-table";
 import apiClient from "./ApiClient";
 
-
-
 function App() {
 
   const [systemEnvironment, setSystemEnvironment] = React.useState(null);

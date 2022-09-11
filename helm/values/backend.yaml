@@ -15,5 +15,9 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: "nginx"
   hosts:
-    - host: test-backend.domain.com
+    - host: test-back.test-app.anext.com.br
       paths: ["/"]
+  tls:
+    - hosts:
+        - test-back.test-app.anext.com.br
+      secretName: star.test-app.anext.com.br
