@@ -115,7 +115,6 @@ stages:
             chartVersion: '1.0'
             releaseName: '${{ parameters.repositoryName }}-front'
             valueFile: 'helm/values/frontend.yaml'
-            recreate: true
             resetValues: true
 
         - task: HelmDeploy@0
@@ -130,5 +129,4 @@ stages:
             chartVersion: '1.0'
             releaseName: '${{ parameters.repositoryName }}-back'
             valueFile: 'helm/values/backend.yaml'
-            recreate: true
-            resetValues: true         
+            resetValues: true
