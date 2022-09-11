@@ -131,14 +131,4 @@ stages:
             releaseName: '${{ parameters.repositoryName }}-back'
             valueFile: 'helm/values/backend.yaml'
             recreate: true
-            resetValues: true
-
-        - task: Bash@3
-          displayName: "Install certificate"
-          inputs:
-            targetType: 'inline'
-            script: |
-              KUBECTL=`find /home -name kubectl -type f | sort -r | head -n 1`
-              TLS_KEY="/etc/letsencrypt/live/test-app.anext.com.br/privkey.pem"
-              TLS_CERT="/etc/letsencrypt/live/test-app.anext.com.br/fullchain.pem"
-              ${KUBECTL} create secret tls star.app-test.anext.com.br --key="${TLS_KEY}" --cert="${TLS_CERT}" -n '${{ parameters.namespace }}'          
+            resetValues: true         
