@@ -22,7 +22,7 @@ parameters:
     type: string
     default: k8s-teste
 
-  - name: kubernetesNamespace
+  - name: namespace
     displayName: "Kubernetes Namespace"
     type: string
     default: test-app
