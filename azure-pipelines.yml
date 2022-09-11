@@ -17,6 +17,16 @@ parameters:
     type: string
     default: anext.azurecr.io
 
+  - name: kubernetesCluster
+    displayName: "Kubernetes service connection"
+    type: string
+    default: k8s-teste
+
+  - name: kubernetesNamespace
+    displayName: "Kubernetes Namespace"
+    type: string
+    default: test-app
+
   - name: repositoryName
     displayName: "Container repository name"
     type: string
@@ -57,3 +67,67 @@ stages:
             Dockerfile: 'backend.Dockerfile'
             buildContext: 'backend'
             tags: '${{ parameters.tagName }}'
+
+  - stage: Deploy
+    jobs:
+    - job: build
+      steps:
+
+        - checkout: self
+
+        - task: Kubernetes@1
+          inputs:
+            connectionType: 'Kubernetes Service Connection'
+            kubernetesServiceEndpoint: '${{ parameters.kubernetesCluster }}'
+            namespace: '${{ parameters.namespace }}'
+            command: 'login'
+
+        - task: KubernetesManifest@0
+          inputs:
+            action: 'createSecret'
+            secretType: 'dockerRegistry'
+            namespace: '${{ parameters.namespace }}'
+            secretName: '${{ parameters.containerRegistry }}'
+            dockerRegistryEndpoint: '${{ parameters.containerRegistry }}'
+
+
+        - task: HelmInstaller@0
+          inputs:
+            helmVersion: '2.14.1'
+            installKubectl: true
+
+        - task: HelmDeploy@0
+          inputs:
+            command: 'package'
+            chartPath: 'helm/sample-app'
+            chartVersion: '1.0'
+
+        - task: HelmDeploy@0
+          displayName: "Deploy Frontend"
+          inputs:
+            connectionType: 'Kubernetes Service Connection'
+            kubernetesServiceConnection: '${{ parameters.kubernetesCluster }}'
+            namespace: '${{ parameters.namespace }}'
+            command: 'upgrade'
+            chartType: 'FilePath'
+            chartPath: 'sample-app-1.0.tgz'
+            chartVersion: '1.0'
+            releaseName: '${{ parameters.repositoryName }}'
+            valueFile: 'helm/values/frontend.yaml'
+            recreate: true
+            resetValues: true
+
+        - task: HelmDeploy@0
+          displayName: "Deploy Backend"
+          inputs:
+            connectionType: 'Kubernetes Service Connection'
+            kubernetesServiceConnection: '${{ parameters.kubernetesCluster }}'
+            namespace: '${{ parameters.namespace }}'
+            command: 'upgrade'
+            chartType: 'FilePath'
+            chartPath: 'sample-app-1.0.tgz'
+            chartVersion: '1.0'
+            releaseName: '${{ parameters.repositoryName }}'
+            valueFile: 'helm/values/backend.yaml'
+            recreate: true
+            resetValues: true
