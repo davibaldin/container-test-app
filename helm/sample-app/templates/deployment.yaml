@@ -94,9 +94,18 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      {{- if .Values.persistence }}
       volumes:
+
+      {{- if .Values.persistence }}
       {{- range .Values.persistence.volumes }}
         - {{ . | toYaml | nindent 10 -}}
+      {{- end }}
+      {{- end }}
+
+      {{- if .Values.config }}
+      {{- range .Values.config }}
+        - name: {{ .name }}
+          configMap:
+            name: {{ .name }}
       {{- end }}
       {{- end }}
