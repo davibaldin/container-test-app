@@ -37,14 +37,27 @@ spec:
           image: {{ $.Values.image.registry }}/{{ $.Values.image.name }}:{{ .name }}-{{ $.Values.image.tag }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
 
-          {{- if .volumeMounts }}
           volumeMounts:
+          {{- if .volumeMounts }}
           {{- range .volumeMounts }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
               subPath: {{ .subPath }}
           {{- end }}
           {{- end }}
+
+          {{- if $.Values.config }}
+          {{- range $.Values.config }}
+          {{- if .mountPath }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              subPath: {{ .name }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+
+
+
 
           {{- if $.Values.env }}
           env:
