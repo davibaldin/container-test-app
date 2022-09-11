@@ -113,7 +113,7 @@ stages:
             chartType: 'FilePath'
             chartPath: '$(Build.ArtifactStagingDirectory)/sample-app-1.0.tgz'
             chartVersion: '1.0'
-            releaseName: '${{ parameters.repositoryName }}'
+            releaseName: '${{ parameters.repositoryName }}-front'
             valueFile: 'helm/values/frontend.yaml'
             recreate: true
             resetValues: true
@@ -126,9 +126,9 @@ stages:
             namespace: '${{ parameters.namespace }}'
             command: 'upgrade'
             chartType: 'FilePath'
-            chartPath: 'sample-app-1.0.tgz'
+            chartPath: '$(Build.ArtifactStagingDirectory)/sample-app-1.0.tgz'
             chartVersion: '1.0'
-            releaseName: '${{ parameters.repositoryName }}'
+            releaseName: '${{ parameters.repositoryName }}-back'
             valueFile: 'helm/values/backend.yaml'
             recreate: true
             resetValues: true
