@@ -25,9 +25,17 @@ stages:
 
   - stage: Build
     jobs:
-    - job: 
+    - job: build
       steps:
+
         - checkout: self
+
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              pwd
+              ls -laFh
 
         - task: Docker@2
           displayName: "Build frontend"
