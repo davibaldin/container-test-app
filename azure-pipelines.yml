@@ -1,6 +1,6 @@
 
 trigger:
-- master
+- disabled
 
 pool:
   #vmImage: ubuntu-latest
@@ -52,21 +52,21 @@ stages:
           displayName: "Build frontend"
           inputs:
             containerRegistry: '${{ parameters.containerRegistry }}'
-            repository: '${{ parameters.containerRegistry }}/frontend'
+            repository: '${{ parameters.repositoryName }}'
             command: 'buildAndPush'
             Dockerfile: 'frontend.Dockerfile'
             buildContext: 'frontend'
-            tags: '${{ parameters.tagName }}'
+            tags: 'frontend-${{ parameters.tagName }}'
 
         - task: Docker@2
           displayName: "Build backend"
           inputs:
             containerRegistry: '${{ parameters.containerRegistry }}'
-            repository: '${{ parameters.containerRegistry }}/backend'
+            repository: '${{ parameters.repositoryName }}'
             command: 'buildAndPush'
             Dockerfile: 'backend.Dockerfile'
             buildContext: 'backend'
-            tags: '${{ parameters.tagName }}'
+            tags: 'backend-${{ parameters.tagName }}'
 
   - stage: Deploy
     jobs:
@@ -85,6 +85,7 @@ stages:
         - task: KubernetesManifest@0
           inputs:
             action: 'createSecret'
+            kubernetesServiceConnection: '${{ parameters.kubernetesCluster }}'
             secretType: 'dockerRegistry'
             namespace: '${{ parameters.namespace }}'
             secretName: '${{ parameters.containerRegistry }}'
@@ -110,9 +111,9 @@ stages:
             namespace: '${{ parameters.namespace }}'
             command: 'upgrade'
             chartType: 'FilePath'
-            chartPath: 'sample-app-1.0.tgz'
+            chartPath: '$(Build.ArtifactStagingDirectory)/sample-app-1.0.tgz'
             chartVersion: '1.0'
-            releaseName: '${{ parameters.repositoryName }}'
+            releaseName: '${{ parameters.repositoryName }}-front'
             valueFile: 'helm/values/frontend.yaml'
             recreate: true
             resetValues: true
@@ -125,9 +126,19 @@ stages:
             namespace: '${{ parameters.namespace }}'
             command: 'upgrade'
             chartType: 'FilePath'
-            chartPath: 'sample-app-1.0.tgz'
+            chartPath: '$(Build.ArtifactStagingDirectory)/sample-app-1.0.tgz'
             chartVersion: '1.0'
-            releaseName: '${{ parameters.repositoryName }}'
+            releaseName: '${{ parameters.repositoryName }}-back'
             valueFile: 'helm/values/backend.yaml'
             recreate: true
             resetValues: true
+
+        - task: Bash@3
+          displayName: "Install certificate"
+          inputs:
+            targetType: 'inline'
+            script: |
+              KUBECTL=`find /home -name kubectl -type f | sort -r | head -n 1`
+              TLS_KEY=`/etc/letsencrypt/live/test-app.anext.com.br/privkey.pem`
+              TLS_CERT=`/etc/letsencrypt/live/test-app.anext.com.br/fullchain.pem`
+              ${KUBECTL} create secret tls star.app-test.anext.com.br --key="${TLS_KEY}" --cert="${TLS_CERT}" -n '${{ parameters.namespace }}'          
