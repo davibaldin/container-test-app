@@ -20,7 +20,7 @@ parameters:
   - name: kubernetesCluster
     displayName: "Kubernetes service connection"
     type: string
-    default: k8s-teste
+    default: k8s-test
 
   - name: namespace
     displayName: "Kubernetes Namespace"
