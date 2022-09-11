@@ -1,0 +1,19 @@
+containers:
+  - name: backend
+
+serviceAccount:
+  create: true
+  name: "backend"
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  hosts:
+    - host: test-backend.domain.com
+      paths: ["/"]

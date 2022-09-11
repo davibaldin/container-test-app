@@ -1,0 +1,71 @@
+replicaCount: 1
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  registry: anext.azurecr.io
+  name: container-test-app
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: anext.azurecr.io
+
+persistence: {}
+
+containers: []
+  # - name: frontend
+  # - name: backend
+
+secrets: {}
+
+config: {}
+
+serviceAccount:
+  create: true
+  name: "container-test-app"
+
+podSecurityContext: {}
+
+annotations: {}
+
+service: {}
+  # type: ClusterIP
+  # port: 3000
+  # targetPort: 3000
+
+ingress:
+  enabled: false
+  # annotations:
+  #   kubernetes.io/ingress.class: "nginx"
+  # hosts:
+  #   - host: project-name.dev.domain.com
+  #     paths: ["/*"]
+  #     backend:
+  #       serviceName: sample-app
+  #       servicePort: 9443
+  # tls:
+  #   - hosts:
+  #       - project-name.dev.domain.com
+  #     secretName: certifica-secret-name
+
+resources: {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 1Gi
+  # requests:
+  #   cpu: 100m
+  #   memory: 1Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
