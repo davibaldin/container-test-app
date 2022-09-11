@@ -52,21 +52,21 @@ stages:
           displayName: "Build frontend"
           inputs:
             containerRegistry: '${{ parameters.containerRegistry }}'
-            repository: '${{ parameters.containerRegistry }}/frontend'
+            repository: '${{ parameters.containerRegistry }}'
             command: 'buildAndPush'
             Dockerfile: 'frontend.Dockerfile'
             buildContext: 'frontend'
-            tags: '${{ parameters.tagName }}'
+            tags: 'frontend-${{ parameters.tagName }}'
 
         - task: Docker@2
           displayName: "Build backend"
           inputs:
             containerRegistry: '${{ parameters.containerRegistry }}'
-            repository: '${{ parameters.containerRegistry }}/backend'
+            repository: '${{ parameters.containerRegistry }}'
             command: 'buildAndPush'
             Dockerfile: 'backend.Dockerfile'
             buildContext: 'backend'
-            tags: '${{ parameters.tagName }}'
+            tags: 'backend-${{ parameters.tagName }}'
 
   - stage: Deploy
     jobs:
