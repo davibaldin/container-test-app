@@ -1,11 +1,9 @@
 FROM node:current-alpine
 
-# Create app directory
-WORKDIR /app
-
 ENV PATH /app/node_modules/.bin:$PATH
 
 USER node
+WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
