@@ -11,6 +11,7 @@ COPY . .
 RUN npm run swagger-autogen
 
 RUN rm -rf /root/.node
+RUN chmod 777 /app
 USER node
 
 EXPOSE 8080
