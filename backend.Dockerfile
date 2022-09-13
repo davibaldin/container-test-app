@@ -5,6 +5,8 @@ WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
+USER node
+
 COPY package*.json ./
 RUN npm install
 
